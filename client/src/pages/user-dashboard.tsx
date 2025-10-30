@@ -56,37 +56,37 @@ export default function UserDashboard() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-8">
         {/* User Profile Header */}
-        <Card className="p-8 mb-8">
-          <div className="flex items-start gap-6">
-            <Avatar className="h-24 w-24">
+        <Card className="p-4 md:p-6 lg:p-8 mb-6 md:mb-8">
+          <div className="flex flex-col sm:flex-row items-start gap-4 md:gap-6">
+            <Avatar className="h-20 w-20 md:h-24 md:w-24 mx-auto sm:mx-0">
               <AvatarImage src={user.photoURL || undefined} alt={user.displayName || "User"} />
-              <AvatarFallback className="text-2xl bg-primary/10">
+              <AvatarFallback className="text-xl md:text-2xl bg-primary/10">
                 {user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
 
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">
+            <div className="flex-1 text-center sm:text-right w-full">
+              <h1 className="text-2xl md:text-3xl font-bold mb-2">
                 {user.displayName || "مستخدم"}
               </h1>
-              <p className="text-muted-foreground mb-4">{user.email}</p>
+              <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4 break-all">{user.email}</p>
               
-              <div className="flex gap-4 text-sm">
+              <div className="flex flex-wrap gap-3 md:gap-4 text-xs md:text-sm justify-center sm:justify-start">
                 <div className="flex items-center gap-2">
-                  <BookmarkIcon className="h-4 w-4 text-primary" />
+                  <BookmarkIcon className="h-3 w-3 md:h-4 md:w-4 text-primary" />
                   <span>{savedProjects.length} مشروع محفوظ</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Heart className="h-4 w-4 text-primary" />
+                  <Heart className="h-3 w-3 md:h-4 md:w-4 text-primary" />
                   <span>0 إعجاب</span>
                 </div>
               </div>
             </div>
 
-            <Button variant="outline">
-              <User className="h-4 w-4 mr-2" />
+            <Button variant="outline" className="w-full sm:w-auto text-sm md:text-base">
+              <User className="h-3 w-3 md:h-4 md:w-4 mr-2" />
               تعديل الملف الشخصي
             </Button>
           </div>
@@ -94,33 +94,33 @@ export default function UserDashboard() {
 
         {/* Tabs */}
         <Tabs defaultValue="saved" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 max-w-md">
-            <TabsTrigger value="saved">المشاريع المحفوظة</TabsTrigger>
-            <TabsTrigger value="liked">المفضلة</TabsTrigger>
-            <TabsTrigger value="activity">النشاط</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 max-w-md mx-auto">
+            <TabsTrigger value="saved" className="text-xs md:text-sm">المشاريع المحفوظة</TabsTrigger>
+            <TabsTrigger value="liked" className="text-xs md:text-sm">المفضلة</TabsTrigger>
+            <TabsTrigger value="activity" className="text-xs md:text-sm">النشاط</TabsTrigger>
           </TabsList>
 
           {/* Saved Projects Tab */}
-          <TabsContent value="saved" className="mt-6">
+          <TabsContent value="saved" className="mt-4 md:mt-6">
             {loading ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">جاري التحميل...</p>
+              <div className="text-center py-8 md:py-12">
+                <p className="text-sm md:text-base text-muted-foreground">جاري التحميل...</p>
               </div>
             ) : savedProjects.length === 0 ? (
-              <Card className="p-12 text-center">
-                <BookmarkIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">
+              <Card className="p-8 md:p-12 text-center">
+                <BookmarkIcon className="h-12 w-12 md:h-16 md:w-16 text-muted-foreground mx-auto mb-3 md:mb-4" />
+                <h3 className="text-lg md:text-xl font-semibold mb-2">
                   لا توجد مشاريع محفوظة
                 </h3>
-                <p className="text-muted-foreground mb-6">
+                <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
                   ابدأ بحفظ المشاريع المفضلة لديك لتجدها هنا
                 </p>
                 <Link href="/">
-                  <Button>استكشف المشاريع</Button>
+                  <Button className="text-sm md:text-base">استكشف المشاريع</Button>
                 </Link>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {savedProjects.map((project) => (
                   <Link key={project.id} href={`/project/${project.projectId}`}>
                     <Card className="overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer h-full">
@@ -160,26 +160,26 @@ export default function UserDashboard() {
           </TabsContent>
 
           {/* Liked Projects Tab */}
-          <TabsContent value="liked" className="mt-6">
-            <Card className="p-12 text-center">
-              <Heart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">
+          <TabsContent value="liked" className="mt-4 md:mt-6">
+            <Card className="p-8 md:p-12 text-center">
+              <Heart className="h-12 w-12 md:h-16 md:w-16 text-muted-foreground mx-auto mb-3 md:mb-4" />
+              <h3 className="text-lg md:text-xl font-semibold mb-2">
                 لا توجد مشاريع مفضلة
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-sm md:text-base text-muted-foreground">
                 قم بالإعجاب بالمشاريع لتظهر هنا
               </p>
             </Card>
           </TabsContent>
 
           {/* Activity Tab */}
-          <TabsContent value="activity" className="mt-6">
-            <Card className="p-12 text-center">
-              <Eye className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">
+          <TabsContent value="activity" className="mt-4 md:mt-6">
+            <Card className="p-8 md:p-12 text-center">
+              <Eye className="h-12 w-12 md:h-16 md:w-16 text-muted-foreground mx-auto mb-3 md:mb-4" />
+              <h3 className="text-lg md:text-xl font-semibold mb-2">
                 لا يوجد نشاط حتى الآن
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-sm md:text-base text-muted-foreground">
                 سيظهر نشاطك الأخير هنا
               </p>
             </Card>

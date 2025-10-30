@@ -117,6 +117,7 @@ export default function ProjectDetails() {
   const [fontSize, setFontSize] = useState(14);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [wrapLines, setWrapLines] = useState(false);
+  const [showMobileFileDrawer, setShowMobileFileDrawer] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -434,6 +435,9 @@ ${analysis.learningPath.map(l => l).join('\n')}
     setShowAIExplanation(false);
     setFileAnalysis(null);
     
+    // إغلاق drawer على الموبايل بعد اختيار الملف
+    setShowMobileFileDrawer(false);
+    
     try {
       const match = project.githubUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
       if (!match) return;
@@ -593,86 +597,86 @@ ${analysis.learningPath.map(l => l).join('\n')}
 
       {/* Hero Section */}
       <div className="border-b bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-          <div className="flex items-start gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-3">
-                <Github className="h-5 w-5 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">{project.author}</span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                <span className="font-semibold">{project.name}</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-8">
+          <div className="flex flex-col lg:flex-row items-start gap-4 md:gap-6">
+            <div className="flex-1 w-full">
+              <div className="flex items-center gap-2 mb-2 md:mb-3 flex-wrap">
+                <Github className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
+                <span className="text-xs md:text-sm text-muted-foreground truncate">{project.author}</span>
+                <ChevronRight className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
+                <span className="text-xs md:text-sm font-semibold truncate">{project.name}</span>
               </div>
 
-              <h1 className="text-4xl font-bold mb-4">{project.name}</h1>
-              <p className="text-xl text-muted-foreground mb-6">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4 break-words">{project.name}</h1>
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-4 md:mb-6">
                 {project.description}
               </p>
 
-              <div className="flex flex-wrap gap-2 mb-6">
+              <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
                 {project.tags && Array.isArray(project.tags) && project.tags.map((tag: string) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
+                    className="px-2 md:px-3 py-1 rounded-full bg-primary/10 text-primary text-xs md:text-sm font-medium"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
 
-              <div className="flex items-center gap-6 text-sm">
+              <div className="flex flex-wrap items-center gap-3 md:gap-6 text-xs md:text-sm">
                 <div className="flex items-center gap-1">
-                  <Star className="h-4 w-4 text-yellow-500" />
+                  <Star className="h-3 w-3 md:h-4 md:w-4 text-yellow-500" />
                   <span className="font-semibold">{project.stars}</span>
-                  <span className="text-muted-foreground">نجمة</span>
+                  <span className="text-muted-foreground hidden sm:inline">نجمة</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <GitFork className="h-4 w-4" />
+                  <GitFork className="h-3 w-3 md:h-4 md:w-4" />
                   <span className="font-semibold">{project.forks}</span>
-                  <span className="text-muted-foreground">فورك</span>
+                  <span className="text-muted-foreground hidden sm:inline">فورك</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Eye className="h-4 w-4" />
+                  <Eye className="h-3 w-3 md:h-4 md:w-4" />
                   <span className="font-semibold">{project.watchers}</span>
-                  <span className="text-muted-foreground">متابع</span>
+                  <span className="text-muted-foreground hidden sm:inline">متابع</span>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-row lg:flex-col gap-2 w-full lg:w-auto">
               <Button 
                 onClick={handleSaveProject}
                 variant={isSaved ? "default" : "outline"}
-                className="gap-2"
+                className="gap-2 flex-1 lg:flex-none text-sm md:text-base"
               >
-                <Bookmark className={`h-4 w-4 ${isSaved ? "fill-current" : ""}`} />
-                {isSaved ? "محفوظ" : "حفظ المشروع"}
+                <Bookmark className={`h-3 w-3 md:h-4 md:w-4 ${isSaved ? "fill-current" : ""}`} />
+                <span className="hidden sm:inline">{isSaved ? "محفوظ" : "حفظ"}</span>
               </Button>
               <Button 
                 variant="outline" 
-                className="gap-2" 
+                className="gap-2 flex-1 lg:flex-none text-sm md:text-base" 
                 asChild
               >
                 <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                  <Github className="h-4 w-4" />
-                  عرض على GitHub
+                  <Github className="h-3 w-3 md:h-4 md:w-4" />
+                  <span className="hidden sm:inline">GitHub</span>
                 </a>
               </Button>
               <Button 
                 variant="outline" 
-                className="gap-2"
+                className="gap-2 flex-1 lg:flex-none text-sm md:text-base"
                 onClick={handleShare}
               >
-                {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
-                {copied ? "تم النسخ" : "مشاركة"}
+                {copied ? <Check className="h-3 w-3 md:h-4 md:w-4" /> : <Share2 className="h-3 w-3 md:h-4 md:w-4" />}
+                <span className="hidden sm:inline">{copied ? "نُسخ" : "مشاركة"}</span>
               </Button>
               <Button 
                 variant="outline" 
-                className="gap-2"
+                className="gap-2 flex-1 lg:flex-none text-sm md:text-base"
                 asChild
               >
                 <a href={`${project.githubUrl}/archive/refs/heads/main.zip`} download>
-                  <Download className="h-4 w-4" />
-                  تحميل
+                  <Download className="h-3 w-3 md:h-4 md:w-4" />
+                  <span className="hidden sm:inline">تحميل</span>
                 </a>
               </Button>
             </div>
@@ -681,18 +685,18 @@ ${analysis.learningPath.map(l => l).join('\n')}
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Sidebar - File Structure */}
-          <div className="lg:col-span-1">
-            <Card className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <Folder className="h-5 w-5 text-primary" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+          {/* Left Sidebar - File Structure - مخفي على الموبايل */}
+          <div className="hidden lg:block lg:col-span-1 order-2 lg:order-1">
+            <Card className="p-3 md:p-4">
+              <div className="flex items-center justify-between mb-3 md:mb-4">
+                <h3 className="text-sm md:text-base font-semibold flex items-center gap-2">
+                  <Folder className="h-4 w-4 md:h-5 md:w-5 text-primary" />
                   ملفات المشروع
                 </h3>
                 <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
-                  {allFiles.length} ملف
+                  {allFiles.length}
                 </span>
               </div>
               
@@ -826,9 +830,9 @@ ${analysis.learningPath.map(l => l).join('\n')}
             </Card>
 
             {/* AI Summary Card */}
-            <Card className="p-6 mt-4 bg-gradient-to-br from-primary/5 to-transparent border-primary/20">
-              <Sparkles className="h-8 w-8 text-primary mb-3 animate-float" />
-              <h3 className="font-semibold mb-2">ملخص ذكي بالـ AI</h3>
+            <Card className="p-4 md:p-6 mt-3 md:mt-4 bg-gradient-to-br from-primary/5 to-transparent border-primary/20">
+              <Sparkles className="h-6 w-6 md:h-8 md:w-8 text-primary mb-2 md:mb-3 animate-float" />
+              <h3 className="text-sm md:text-base font-semibold mb-2">ملخص ذكي بالـ AI</h3>
               
               {aiSummary ? (
                 <div className="text-sm text-muted-foreground mb-4 whitespace-pre-line">
@@ -864,9 +868,9 @@ ${analysis.learningPath.map(l => l).join('\n')}
 
             {/* Images Card */}
             {imageFiles.length > 0 && (
-              <Card className="p-4 mt-4">
-                <h3 className="font-semibold mb-4 flex items-center gap-2">
-                  <FileCode className="h-5 w-5 text-primary" />
+              <Card className="p-3 md:p-4 mt-3 md:mt-4">
+                <h3 className="text-sm md:text-base font-semibold mb-3 md:mb-4 flex items-center gap-2">
+                  <FileCode className="h-4 w-4 md:h-5 md:w-5 text-primary" />
                   صور المشروع ({imageFiles.length})
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -893,17 +897,17 @@ ${analysis.learningPath.map(l => l).join('\n')}
             )}
           </div>
 
-          {/* Main Content Area */}
-          <div className="lg:col-span-2">
+          {/* Main Content Area - عرض كامل على الموبايل */}
+          <div className="col-span-1 lg:col-span-2 order-1 lg:order-2">
             <Tabs defaultValue="readme" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="readme">README</TabsTrigger>
-                <TabsTrigger value="code">الكود</TabsTrigger>
-                <TabsTrigger value="preview">معاينة</TabsTrigger>
+                <TabsTrigger value="readme" className="text-xs md:text-sm">README</TabsTrigger>
+                <TabsTrigger value="code" className="text-xs md:text-sm">الكود</TabsTrigger>
+                <TabsTrigger value="preview" className="text-xs md:text-sm">معاينة</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="readme" className="mt-4">
-                <Card className="p-6">
+              <TabsContent value="readme" className="mt-3 md:mt-4">
+                <Card className="p-4 md:p-6">
                   {loadingReadme ? (
                     <div className="flex items-center justify-center py-12">
                       <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -911,45 +915,45 @@ ${analysis.learningPath.map(l => l).join('\n')}
                   ) : readmeContent ? (
                     <div className="prose dark:prose-invert max-w-none">
                       {/* Header جميل */}
-                      <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 rounded-lg p-6 mb-6 border border-primary/20">
-                        <h1 className="text-3xl font-bold mb-3 flex items-center gap-3">
-                          <Github className="h-8 w-8 text-primary" />
-                          {project.name}
+                      <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 rounded-lg p-4 md:p-6 mb-4 md:mb-6 border border-primary/20">
+                        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 md:mb-3 flex items-center gap-2 md:gap-3 flex-wrap">
+                          <Github className="h-6 w-6 md:h-8 md:w-8 text-primary" />
+                          <span className="break-words">{project.name}</span>
                         </h1>
-                        <p className="text-lg text-muted-foreground">{project.description}</p>
+                        <p className="text-sm md:text-base lg:text-lg text-muted-foreground">{project.description}</p>
                       </div>
 
                       {/* Stats Cards */}
-                      <div className="grid grid-cols-3 gap-4 mb-6">
-                        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 text-center">
-                          <Star className="h-6 w-6 text-yellow-500 mx-auto mb-2" />
-                          <div className="text-2xl font-bold">{project.stars}</div>
-                          <div className="text-sm text-muted-foreground">نجمة</div>
+                      <div className="grid grid-cols-3 gap-2 md:gap-4 mb-4 md:mb-6">
+                        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-2 md:p-4 text-center">
+                          <Star className="h-4 w-4 md:h-6 md:w-6 text-yellow-500 mx-auto mb-1 md:mb-2" />
+                          <div className="text-lg md:text-2xl font-bold">{project.stars}</div>
+                          <div className="text-xs md:text-sm text-muted-foreground">نجمة</div>
                         </div>
-                        <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 text-center">
-                          <GitFork className="h-6 w-6 text-blue-500 mx-auto mb-2" />
-                          <div className="text-2xl font-bold">{project.forks}</div>
-                          <div className="text-sm text-muted-foreground">فورك</div>
+                        <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-2 md:p-4 text-center">
+                          <GitFork className="h-4 w-4 md:h-6 md:w-6 text-blue-500 mx-auto mb-1 md:mb-2" />
+                          <div className="text-lg md:text-2xl font-bold">{project.forks}</div>
+                          <div className="text-xs md:text-sm text-muted-foreground">فورك</div>
                         </div>
-                        <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center">
-                          <Eye className="h-6 w-6 text-green-500 mx-auto mb-2" />
-                          <div className="text-2xl font-bold">{project.watchers || 0}</div>
-                          <div className="text-sm text-muted-foreground">متابع</div>
+                        <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-2 md:p-4 text-center">
+                          <Eye className="h-4 w-4 md:h-6 md:w-6 text-green-500 mx-auto mb-1 md:mb-2" />
+                          <div className="text-lg md:text-2xl font-bold">{project.watchers || 0}</div>
+                          <div className="text-xs md:text-sm text-muted-foreground">متابع</div>
                         </div>
                       </div>
 
                       {/* Tags */}
                       {project.tags && project.tags.length > 0 && (
-                        <div className="mb-6">
-                          <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
+                        <div className="mb-4 md:mb-6">
+                          <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 flex items-center gap-2">
                             <Sparkles className="h-5 w-5 text-primary" />
                             التقنيات المستخدمة
                           </h3>
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-1.5 md:gap-2">
                             {project.tags.map((tag: string) => (
                               <span
                                 key={tag}
-                                className="px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20 hover:bg-primary/20 transition-colors"
+                                className="px-2 md:px-4 py-1 md:py-2 rounded-full bg-primary/10 text-primary text-xs md:text-sm font-medium border border-primary/20 hover:bg-primary/20 transition-colors"
                               >
                                 {tag}
                               </span>
@@ -959,35 +963,35 @@ ${analysis.learningPath.map(l => l).join('\n')}
                       )}
 
                       {/* README Content */}
-                      <div className="bg-muted/30 rounded-lg p-6 border">
-                        <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                          <FileCode className="h-5 w-5 text-primary" />
+                      <div className="bg-muted/30 rounded-lg p-3 md:p-6 border">
+                        <h3 className="text-base md:text-xl font-bold mb-3 md:mb-4 flex items-center gap-2">
+                          <FileCode className="h-4 w-4 md:h-5 md:w-5 text-primary" />
                           محتوى README
                         </h3>
-                        <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                        <div className="whitespace-pre-wrap text-xs md:text-sm leading-relaxed overflow-x-auto">
                           {readmeContent}
                         </div>
                       </div>
 
                       {/* GitHub Link */}
-                      <div className="mt-6 p-4 bg-gradient-to-r from-primary/5 to-transparent rounded-lg border border-primary/20">
-                        <h3 className="text-lg font-bold mb-2">🔗 رابط المشروع على GitHub</h3>
+                      <div className="mt-4 md:mt-6 p-3 md:p-4 bg-gradient-to-r from-primary/5 to-transparent rounded-lg border border-primary/20">
+                        <h3 className="text-base md:text-lg font-bold mb-2">🔗 رابط المشروع على GitHub</h3>
                         <a 
                           href={project.githubUrl} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-primary hover:underline flex items-center gap-2 text-lg"
+                          className="text-primary hover:underline flex items-center gap-2 text-sm md:text-base lg:text-lg break-all"
                         >
-                          <Github className="h-5 w-5" />
-                          {project.githubUrl}
-                          <ExternalLink className="h-4 w-4" />
+                          <Github className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
+                          <span className="break-all">{project.githubUrl}</span>
+                          <ExternalLink className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
                         </a>
                       </div>
                     </div>
                   ) : (
                     <div className="prose dark:prose-invert max-w-none">
                       {/* Fallback Content */}
-                      <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 rounded-lg p-6 mb-6 border border-primary/20">
+                      <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-primary/10 rounded-lg p-4 md:p-6 mb-4 md:mb-6 border border-primary/20">
                         <h1 className="text-3xl font-bold mb-3 flex items-center gap-3">
                           <Github className="h-8 w-8 text-primary" />
                           {project.name}
@@ -1050,21 +1054,32 @@ ${analysis.learningPath.map(l => l).join('\n')}
                 </Card>
               </TabsContent>
 
-              <TabsContent value="code" className="mt-4">
+              <TabsContent value="code" className="mt-3 md:mt-4">
                 <Card className={`${isFullscreen ? 'fixed inset-0 z-50 rounded-none' : ''} transition-all duration-300`}>
-                  <div className="p-6">
+                  <div className="p-3 md:p-6">
                     {/* Header with Controls */}
-                    <div className="flex items-center justify-between mb-4 pb-4 border-b">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded-lg">
-                          <FileCode className="h-5 w-5 text-primary" />
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-3 md:mb-4 pb-3 md:pb-4 border-b gap-3">
+                      <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto overflow-hidden">
+                        {/* زر فتح الملفات على الموبايل */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setShowMobileFileDrawer(true)}
+                          className="lg:hidden flex-shrink-0 h-8"
+                        >
+                          <Folder className="h-4 w-4 mr-1" />
+                          الملفات
+                        </Button>
+                        
+                        <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg flex-shrink-0">
+                          <FileCode className="h-4 w-4 md:h-5 md:w-5 text-primary" />
                         </div>
-                        <div>
-                          <span className="font-semibold block">
+                        <div className="min-w-0 flex-1">
+                          <span className="font-semibold block text-sm md:text-base truncate">
                             {selectedFile?.split('/').pop() || "اختر ملفاً من القائمة"}
                           </span>
                           {selectedFile && (
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-muted-foreground truncate block">
                               {selectedFile}
                             </span>
                           )}
@@ -1072,7 +1087,7 @@ ${analysis.learningPath.map(l => l).join('\n')}
                       </div>
                       
                       {fileContent && (
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 md:gap-2 flex-wrap w-full md:w-auto">
                           {/* Font Size Controls */}
                           <div className="flex items-center gap-1 border rounded-lg p-1">
                             <Button
@@ -1113,11 +1128,11 @@ ${analysis.learningPath.map(l => l).join('\n')}
                             variant="outline"
                             size="sm"
                             onClick={downloadFile}
-                            className="gap-2"
+                            className="gap-1 md:gap-2 text-xs md:text-sm h-8 md:h-9"
                             title="تحميل الملف"
                           >
-                            <Download className="h-4 w-4" />
-                            تحميل
+                            <Download className="h-3 w-3 md:h-4 md:w-4" />
+                            <span className="hidden sm:inline">تحميل</span>
                           </Button>
 
                           {/* Copy */}
@@ -1125,11 +1140,11 @@ ${analysis.learningPath.map(l => l).join('\n')}
                             variant="outline"
                             size="sm"
                             onClick={copyCode}
-                            className="gap-2"
+                            className="gap-1 md:gap-2 text-xs md:text-sm h-8 md:h-9"
                             title="نسخ الكود"
                           >
-                            <Copy className="h-4 w-4" />
-                            نسخ
+                            <Copy className="h-3 w-3 md:h-4 md:w-4" />
+                            <span className="hidden sm:inline">نسخ</span>
                           </Button>
 
                           {/* AI Explanation */}
@@ -1137,10 +1152,10 @@ ${analysis.learningPath.map(l => l).join('\n')}
                             variant="outline"
                             size="sm"
                             onClick={() => setShowAIExplanation(!showAIExplanation)}
-                            className="gap-2"
+                            className="gap-1 md:gap-2 text-xs md:text-sm h-8 md:h-9"
                           >
-                            <Sparkles className="h-4 w-4" />
-                            AI
+                            <Sparkles className="h-3 w-3 md:h-4 md:w-4" />
+                            <span className="hidden sm:inline">AI</span>
                           </Button>
 
                           {/* Fullscreen Toggle */}
@@ -1148,18 +1163,18 @@ ${analysis.learningPath.map(l => l).join('\n')}
                             variant="outline"
                             size="sm"
                             onClick={() => setIsFullscreen(!isFullscreen)}
-                            className="gap-2"
+                            className="gap-1 md:gap-2 text-xs md:text-sm h-8 md:h-9"
                             title="ملء الشاشة"
                           >
                             {isFullscreen ? (
                               <>
-                                <ExternalLink className="h-4 w-4 rotate-180" />
-                                إغلاق
+                                <ExternalLink className="h-3 w-3 md:h-4 md:w-4 rotate-180" />
+                                <span className="hidden sm:inline">إغلاق</span>
                               </>
                             ) : (
                               <>
-                                <ExternalLink className="h-4 w-4" />
-                                ملء
+                                <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
+                                <span className="hidden sm:inline">ملء</span>
                               </>
                             )}
                           </Button>
@@ -1218,8 +1233,8 @@ ${analysis.learningPath.map(l => l).join('\n')}
                       </div>
 
                       {/* Code Stats */}
-                      <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div className="mt-3 md:mt-4 p-3 md:p-4 bg-muted/50 rounded-lg">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 text-xs md:text-sm">
                           <div className="flex items-center gap-2">
                             <div className="p-2 bg-blue-500/10 rounded">
                               <span className="text-blue-500">📊</span>
@@ -1384,6 +1399,163 @@ ${analysis.learningPath.map(l => l).join('\n')}
           </div>
         </div>
       </div>
+
+      {/* Mobile File Drawer - يظهر فقط على الشاشات الصغيرة */}
+      {showMobileFileDrawer && (
+        <>
+          {/* Backdrop/Overlay */}
+          <div 
+            className="fixed inset-0 bg-black/50 z-50 lg:hidden animate-fadeIn"
+            onClick={() => setShowMobileFileDrawer(false)}
+          />
+          
+          {/* Drawer */}
+          <div className="fixed inset-x-0 bottom-0 z-50 lg:hidden animate-slideUp">
+            <Card className="rounded-t-2xl rounded-b-none max-h-[80vh] flex flex-col">
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-card">
+                <div className="flex items-center gap-2">
+                  <Folder className="h-5 w-5 text-primary" />
+                  <h3 className="font-semibold">ملفات المشروع</h3>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                    {allFiles.length}
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowMobileFileDrawer(false)}
+                  className="h-8 w-8 p-0"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+
+              {/* Search Box */}
+              <div className="p-4 border-b">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="🔍 ابحث عن ملف..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full px-3 py-2 pr-10 text-sm border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded transition-colors"
+                    >
+                      <X className="h-4 w-4 text-muted-foreground" />
+                    </button>
+                  )}
+                </div>
+                {searchQuery && (
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    {filteredFiles.length > 0 ? (
+                      <>
+                        <span className="font-semibold text-primary">{filteredFiles.length}</span> نتيجة
+                      </>
+                    ) : (
+                      <span className="text-red-500">لا توجد نتائج</span>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Files List */}
+              <div className="flex-1 overflow-y-auto p-4">
+                <div className="space-y-1">
+                  {searchQuery ? (
+                    /* عرض نتائج البحث */
+                    filteredFiles.length > 0 ? (
+                      filteredFiles.map((file: any) => (
+                        <button
+                          key={file.path}
+                          onClick={() => fetchFileContent(file.path)}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg hover:bg-muted transition-all flex flex-col gap-1 ${
+                            selectedFile === file.path ? "bg-primary/10 border border-primary" : "border border-transparent"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-base">{getFileIcon(file.name)}</span>
+                            <span className={`text-sm flex-1 truncate ${selectedFile === file.path ? 'font-semibold text-primary' : ''}`}>
+                              {file.name}
+                            </span>
+                            {selectedFile === file.path && (
+                              <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                            )}
+                          </div>
+                          <div className="text-xs text-muted-foreground mr-6 truncate">
+                            {file.path}
+                          </div>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="text-center py-8 text-muted-foreground text-sm">
+                        <Search className="h-12 w-12 mx-auto mb-3 opacity-30" />
+                        <p className="font-medium mb-1">لا توجد نتائج</p>
+                        <p className="text-xs">جرب البحث بكلمات مختلفة</p>
+                      </div>
+                    )
+                  ) : (
+                    /* عرض شجرة الملفات */
+                    <>
+                      {/* الملفات في المجلد الرئيسي */}
+                      {repoFiles.map((file: any) => (
+                        <button
+                          key={file.path}
+                          onClick={() => fetchFileContent(file.path)}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg hover:bg-muted transition-colors flex items-center gap-2 ${
+                            selectedFile === file.path ? "bg-primary/10 border border-primary" : "border border-transparent"
+                          }`}
+                        >
+                          <span className="text-base">{getFileIcon(file.name)}</span>
+                          <span className={`text-sm truncate flex-1 ${selectedFile === file.path ? 'font-semibold text-primary' : ''}`}>
+                            {file.name}
+                          </span>
+                          {selectedFile === file.path && (
+                            <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                          )}
+                        </button>
+                      ))}
+
+                      {/* المجلدات */}
+                      <FolderTree
+                        items={folders}
+                        level={0}
+                        expandedFolders={expandedFolders}
+                        folderContents={folderContents}
+                        selectedFile={selectedFile}
+                        onToggleFolder={toggleFolder}
+                        onSelectFile={fetchFileContent}
+                        getFileIcon={getFileIcon}
+                      />
+
+                      {repoFiles.length === 0 && folders.length === 0 && (
+                        <div className="text-center py-8 text-muted-foreground text-sm">
+                          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+                          جاري تحميل الملفات...
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Footer Stats */}
+              {allFiles.length > 0 && (
+                <div className="p-4 border-t bg-muted/30">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>📁 {folders.length} مجلد</span>
+                    <span>📄 {allFiles.length} ملف</span>
+                  </div>
+                </div>
+              )}
+            </Card>
+          </div>
+        </>
+      )}
     </div>
   );
 }
