@@ -1,0 +1,26 @@
+Major Update: Enhanced SEO, Search Features and Nested Folders Support
+
+New Features:
+- Advanced SEO optimization with 22+ meta tags
+- 4 Structured Data schemas
+- Enhanced Open Graph and Twitter Cards
+- Intelligent search system with highlighting
+- Nested folders support with recursive component
+- Real-time search in homepage
+
+SEO Improvements:
+- Added robots.txt and sitemap.xml
+- 30+ targeted keywords
+- Rich snippets support
+- Multi-language support
+
+Search Enhancements:
+- useMemo for optimized performance
+- Smart sorting and filtering
+- Highlight matching text
+- Results counter
+
+UI/UX Updates:
+- Rebranded to Tolzy Stack
+- Improved search interface
+- Better animations
